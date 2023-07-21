@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Give heart for you</title>
+
+    <style>
+        html {
+            height: 100%;
+        }
+        
+        body {
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .heart {
+            width: 50px;
+            height: 50px;
+            background: red;
+            transform: rotate(45deg);
+            position: absolute;
+            left: 200px;
+            top: 200px;
+        }
+        
+        .heart .left {
+            content: '';
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: red;
+            position: absolute;
+            left: -25px;
+            top: 0px;
+        }
+        
+        .heart .right {
+            content: '';
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: red;
+            position: absolute;
+            left: 0px;
+            top: -25px;
+        }
+        
+        h1,
+        h2 {
+            color: white;
+            position: relative;
+        }
+        
+        .panel {
+            z-index: 1;
+            padding: 40px;
+            background: rgba( 255, 154, 154, 0.10);
+            box-shadow: 0 8px 32px 0 pink;
+            backdrop-filter: blur( 10.5px);
+            -webkit-backdrop-filter: blur( 10.5px);
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="panel" style="visibility: hidden;">
+
+    </div>
+
+
+
+    <script>
+        const hearts = [];
+        const pinks = ["#ff748c", "#ff8da1", "#ffa7b6"];
+
+        class Heart {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.theta = Math.random() * Math.PI * 2;
+                const heartEl = document.createElement("div");
+                heartEl.classList.add("heart");
+                document.body.append(heartEl);
+                const color = pinks[parseInt(Math.random() * pinks.length)];
+                heartEl.style.background = color;
+
+                const heartLeftEl = document.createElement("div");
+                heartLeftEl.classList.add('left');
+                heartLeftEl.style.background = color;
+                heartEl.appendChild(heartLeftEl);
+
+                const heartRightEl = document.createElement("div");
+                heartRightEl.classList.add('right');
+                heartRightEl.style.background = color;
+                heartEl.appendChild(heartRightEl);
+
+                this.el = heartEl;
+
+                setTimeout(() => {
+                    this.el.remove();
+                    this.hearts.splice(this.hearts.indexOf(this));
+                }, 10000)
+            }
+
+            update() {
+                this.x += Math.cos(this.theta) * 1;
+                this.y += 1;
+                this.theta += 0.01;
+                this.el.style.left = `${this.x}px`;
+                this.el.style.top = `${this.y}px`;
+            }
+        }
+
+        setInterval(() => {
+            const heart = new Heart(Math.random() * window.innerWidth, -100);
+            hearts.push(heart);
+        }, 200);
+
+        setInterval(() => {
+            hearts.forEach((heart) => heart.update());
+        }, 10);
+    </script>
+</body>
+
+</html>
